@@ -1,7 +1,7 @@
 import pygame
 
 
-def input():
+def input(objects):
     running = True
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

@@ -19,3 +19,13 @@ class Hand:
 
     def exhaust(self, card):
         pass
+
+    def draw(self, screen):
+        for card in self.cards:
+            card.draw(screen)
+
+    def calculate_new_positions():
+        pass
+
+    def update():
+        pass

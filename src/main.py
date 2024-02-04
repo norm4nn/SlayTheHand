@@ -1,6 +1,7 @@
 import pygame
 from Engine.draw import draw
 from Engine.input import input
+from Engine.init import init
 
 
 WIDTH = 1280
@@ -17,9 +18,12 @@ pygame.display.set_caption("SlayTheHand")
 
 running = True
 
-while running:
-    running = input()
+hand = init()
+objects = [hand]
 
-    draw(screen)
+while running:
+    running = input(objects)
+
+    draw(screen, objects)
 
     clock.tick(FPS_CAP)

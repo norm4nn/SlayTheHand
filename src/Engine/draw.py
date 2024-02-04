@@ -2,8 +2,12 @@ import pygame
 from Colors import colors
 
 
-def draw(screen):
+def draw(screen, objects):
     draw_background(screen)
+
+    for object in objects:
+        object.draw(screen)
+
     pygame.display.update()
 
 

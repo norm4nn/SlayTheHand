@@ -6,6 +6,8 @@ BACKGROUND_COLOR_DARK_THEME = (76, 75, 99)
 MAIN_COLOR_DARK_THEME = (44, 42, 74)
 SECOND_COLOR_DARK_THEME = (79, 81, 140)
 
+SHADOW = (30, 30, 30)
+
 IS_DARK_THEME_OFF = True
 
 
@@ -29,3 +31,7 @@ def get_second_color():
 
 def toggle_theme():
     IS_DARK_THEME_OFF = not IS_DARK_THEME_OFF
+
+
+def get_shadow():
+    return SHADOW
