@@ -18,6 +18,7 @@ class Card:
         self.destination_rotation = None
         self.starting_rotation = None
         self.translation_speed = 4
+        self.rotation_speed = 6
 
     def use(self):
         pass
@@ -30,19 +31,33 @@ class Card:
         self.observer.use(self)
 
     def draw(self, screen):
-        shadow_rect = pygame.Rect(self.rect)
-        shadow_rect = shadow_rect.move(0.03 * self.rect.width, 0.03 * self.rect.height)
+        rotated_surface = pygame.Surface(self.rect.size, pygame.SRCALPHA)
         pygame.draw.rect(
-            screen, colors.get_shadow(), shadow_rect, border_radius=self.border_radius
-        )
-        pygame.draw.rect(
-            screen,
+            rotated_surface,
             colors.get_second_color(),
-            self.rect,
+            (0, 0, self.rect.width, self.rect.height),
             border_radius=self.border_radius,
         )
 
+        pygame.draw.rect(
+            rotated_surface,
+            colors.get_main_color(),
+            (0, 0, self.rect.width, self.rect.height),
+            border_radius=self.border_radius,
+            width=2,
+        )
+
+        rotated_surface = pygame.transform.rotate(rotated_surface, self.rotation)
+
+        rotated_rect = rotated_surface.get_rect(center=self.rect.center)
+
+        screen.blit(rotated_surface, rotated_rect.topleft)
+
     def update(self, dt):
+        self.update_position(dt)
+        self.update_rotation(dt)
+
+    def update_position(self, dt):
         if self.destination_xy is not None:
             diff_x = self.destination_xy[0] - self.xy[0]
             diff_y = self.destination_xy[1] - self.xy[1]
@@ -57,6 +72,25 @@ class Card:
 
         self.rect.x, self.rect.y = self.xy
 
+    def update_rotation(self, dt):
+        if self.destination_rotation is not None:
+            diff_rotation = self.destination_rotation - self.rotation
+            self.rotation += diff_rotation * self.rotation_speed * dt
+            abs_rotation = abs(self.destination_rotation - self.rotation)
+            if abs_rotation < 0.01:
+                self.destination_rotation = None
+
+    def add_destination_rotation(self, destination_rotation):
+        self.starting_rotation = self.rotation
+        self.destination_rotation = destination_rotation
+
+    def rotate_to(self, angle):
+        self.destination_rotation = angle
+
     def add_destination_xy(self, destination):
         self.starting_xy = self.xy
         self.destination_xy = destination
+
+    def reset_rotation(self):
+        self.rotation = 0
+        self.rotate_to = None
