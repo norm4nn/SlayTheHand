@@ -11,6 +11,13 @@ class Card:
         self.hover = False
         self.observer = None
         self.border_radius = int(0.1 * self.rect.width)
+        self.xy = (rect.x, rect.y)
+        self.rotation = 0
+        self.destination_xy = None
+        self.starting_xy = None
+        self.destination_rotation = None
+        self.starting_rotation = None
+        self.translation_speed = 4
 
     def use(self):
         pass
@@ -35,5 +42,21 @@ class Card:
             border_radius=self.border_radius,
         )
 
-    def update():
-        pass  # TO DO
+    def update(self, dt):
+        if self.destination_xy is not None:
+            diff_x = self.destination_xy[0] - self.xy[0]
+            diff_y = self.destination_xy[1] - self.xy[1]
+            self.xy = (
+                self.xy[0] + diff_x * self.translation_speed * dt,
+                self.xy[1] + diff_y * self.translation_speed * dt,
+            )
+            abs_x = abs(self.destination_xy[0] - self.xy[0])
+            abs_y = abs(self.destination_xy[1] - self.xy[1])
+            if abs_x < 0.1 and abs_y < 0.1:
+                self.destination_xy = None
+
+        self.rect.x, self.rect.y = self.xy
+
+    def add_destination_xy(self, destination):
+        self.starting_xy = self.xy
+        self.destination_xy = destination

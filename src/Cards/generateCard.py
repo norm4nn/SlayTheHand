@@ -1,12 +1,9 @@
 import pygame
 from Cards.Card import Card
-
-DEFAULT_CARD_WIDTH = 180
-DEFAULT_CARD_HEIGHT = 240
-
+from Engine.config import Config
 
 def generateCard():
-    rect = pygame.Rect(100, 100, DEFAULT_CARD_WIDTH, DEFAULT_CARD_HEIGHT)
+    rect = pygame.Rect(100, 100, Config.DEFAULT_CARD_WIDTH, Config.DEFAULT_CARD_HEIGHT)
     name = "Example name"
     desc = "Action"
     image = None
