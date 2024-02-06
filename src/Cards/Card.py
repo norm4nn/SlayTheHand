@@ -1,4 +1,5 @@
 from Colors import colors
+from Engine.config import Config
 import pygame
 
 
@@ -8,7 +9,7 @@ class Card:
         self.name = name
         self.desc = desc
         self.image = image
-        self.hover = False
+        self.is_hovered = False
         self.observer = None
         self.border_radius = int(0.1 * self.rect.width)
         self.xy = (rect.x, rect.y)
@@ -19,6 +20,10 @@ class Card:
         self.starting_rotation = None
         self.translation_speed = 4
         self.rotation_speed = 6
+        self.scale = 1
+        self.destination_scale = None
+        self.starting_scale = None
+        self.scale_change_speed = 6
 
     def use(self):
         pass
@@ -31,18 +36,21 @@ class Card:
         self.observer.use(self)
 
     def draw(self, screen):
-        rotated_surface = pygame.Surface(self.rect.size, pygame.SRCALPHA)
+        dummy_rect = pygame.Rect(self.rect)
+        dummy_rect.width *= self.scale
+        dummy_rect.height *= self.scale
+        rotated_surface = pygame.Surface(dummy_rect.size, pygame.SRCALPHA)
         pygame.draw.rect(
             rotated_surface,
             colors.get_second_color(),
-            (0, 0, self.rect.width, self.rect.height),
+            (0, 0, self.rect.width * self.scale, self.rect.height * self.scale),
             border_radius=self.border_radius,
         )
 
         pygame.draw.rect(
             rotated_surface,
             colors.get_main_color(),
-            (0, 0, self.rect.width, self.rect.height),
+            (0, 0, self.rect.width * self.scale, self.rect.height * self.scale),
             border_radius=self.border_radius,
             width=2,
         )
@@ -54,8 +62,30 @@ class Card:
         screen.blit(rotated_surface, rotated_rect.topleft)
 
     def update(self, dt):
+        if self.detected_hover():
+            self.observer.hovered_card(self)
+        elif self.is_hovered:
+            self.observer.unhovered_card(self)
+
+        self.update_scale(dt)
         self.update_position(dt)
         self.update_rotation(dt)
+
+    def detected_hover(self):
+        dummy_rect = pygame.Rect(self.rect)
+        dummy_rect.width *= self.scale
+        dummy_rect.height *= self.scale
+
+        mouse_pos = pygame.mouse.get_pos()
+        return dummy_rect.collidepoint(mouse_pos)
+
+    def update_scale(self, dt):
+        if self.destination_scale is not None:
+            diff = self.destination_scale - self.scale
+            self.scale += diff * self.scale_change_speed * dt
+
+            if abs(diff) < 0.01:
+                self.destination_scale = None
 
     def update_position(self, dt):
         if self.destination_xy is not None:
@@ -94,3 +124,29 @@ class Card:
     def reset_rotation(self):
         self.rotation = 0
         self.rotate_to = None
+
+    def set_scale_destination(self, scale_to):
+        self.destination_scale = scale_to
+        self.starting_scale = self.scale
+
+    def move_by_vector(self, vector):
+        self.add_destination_xy(
+            (
+                self.xy[0] + vector[0],
+                self.xy[1] + vector[1],
+            )
+        )
+
+    def hover(self):
+        if not self.is_hovered:
+            self.set_scale_destination(1.5)
+            self.add_destination_xy(
+                (self.xy[0], Config.HEIGHT - 1.25 * self.rect.height)
+            )
+            self.add_destination_rotation(0)
+            self.is_hovered = True
+
+    def unhover(self):
+        if self.is_hovered:
+            self.set_scale_destination(1)
+            self.is_hovered = False
