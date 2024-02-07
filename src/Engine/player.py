@@ -2,10 +2,10 @@ from Cards.generateCard import generateCard
 from Cards.Hand import Hand
 
 
-class Engine:
+class Player:
     hand = Hand()
 
     @staticmethod
     def add_card():
         card = generateCard()
-        Engine.hand.add(card)
+        Player.hand.add(card)

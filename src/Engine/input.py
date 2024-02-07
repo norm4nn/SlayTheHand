@@ -1,5 +1,5 @@
 import pygame
-from Engine.engine import Engine
+from Engine.player import Player
 
 
 def input(objects):
@@ -9,6 +9,6 @@ def input(objects):
             running = False
 
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            Engine.add_card()
+            Player.add_card()
 
     return running

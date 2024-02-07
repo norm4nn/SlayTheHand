@@ -2,24 +2,20 @@ import pygame
 from Engine.draw import draw
 from Engine.input import input
 from Engine.update import update
-from Engine.engine import Engine
+from Engine.player import Player
 from Engine.config import Config
 
-
-WIDTH = 1280
-HEIGHT = 720
-FPS_CAP = 60
 
 pygame.init()
 
 screen = pygame.display.set_mode((Config.WIDTH, Config.HEIGHT))
 clock = pygame.time.Clock()
 
-pygame.display.set_caption("SlayTheHand")
+pygame.display.set_caption(Config.TITLE)
 
 running = True
 
-hand = Engine.hand
+hand = Player.hand
 objects = [hand]
 
 while running:

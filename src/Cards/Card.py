@@ -110,14 +110,14 @@ class Card:
             if abs_rotation < 0.01:
                 self.destination_rotation = None
 
-    def add_destination_rotation(self, destination_rotation):
+    def set_destination_rotation(self, destination_rotation):
         self.starting_rotation = self.rotation
         self.destination_rotation = destination_rotation
 
     def rotate_to(self, angle):
         self.destination_rotation = angle
 
-    def add_destination_xy(self, destination):
+    def set_destination_xy(self, destination):
         self.starting_xy = self.xy
         self.destination_xy = destination
 
@@ -130,7 +130,7 @@ class Card:
         self.starting_scale = self.scale
 
     def move_by_vector(self, vector):
-        self.add_destination_xy(
+        self.set_destination_xy(
             (
                 self.xy[0] + vector[0],
                 self.xy[1] + vector[1],
@@ -140,10 +140,10 @@ class Card:
     def hover(self):
         if not self.is_hovered:
             self.set_scale_destination(1.5)
-            self.add_destination_xy(
+            self.set_destination_xy(
                 (self.xy[0], Config.HEIGHT - 1.25 * self.rect.height)
             )
-            self.add_destination_rotation(0)
+            self.set_destination_rotation(0)
             self.is_hovered = True
 
     def unhover(self):
