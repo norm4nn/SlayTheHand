@@ -28,6 +28,8 @@ class Hand:
         if card in self.cards:
             self.cards.remove(card)
             self.drawing_order.remove(card)
+            self.currently_hovered = None
+            self.calculate_position_for_cards()
 
     def exhaust(self, card):
         pass
@@ -109,3 +111,7 @@ class Hand:
                 other_card.set_destination_xy((x - move_by, y))
             else:
                 other_card.set_destination_xy((x + move_by, y))
+
+    def input(self):
+        for card in self.cards:
+            card.input()

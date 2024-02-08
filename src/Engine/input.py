@@ -10,5 +10,6 @@ def input(objects):
 
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             Player.add_card()
-
+    for object in objects:
+        object.input()
     return running

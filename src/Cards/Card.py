@@ -62,11 +62,6 @@ class Card:
         screen.blit(rotated_surface, rotated_rect.topleft)
 
     def update(self, dt):
-        if self.detected_hover():
-            self.observer.hovered_card(self)
-        elif self.is_hovered:
-            self.observer.unhovered_card(self)
-
         self.update_scale(dt)
         self.update_position(dt)
         self.update_rotation(dt)
@@ -150,3 +145,12 @@ class Card:
         if self.is_hovered:
             self.set_scale_destination(1)
             self.is_hovered = False
+
+    def input(self):
+        if self.detected_hover():
+            self.observer.hovered_card(self)
+        elif self.is_hovered:
+            self.observer.unhovered_card(self)
+
+        if self.detected_hover() and self.is_hovered and pygame.mouse.get_pressed()[0]:
+            self.observer.discard(self)
