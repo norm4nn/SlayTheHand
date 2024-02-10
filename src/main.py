@@ -1,8 +1,9 @@
 import pygame
-from Engine.draw import draw
-from Engine.input import input
-from Engine.update import update
-from Engine.player import Player
+from Engine.DrawManager import DrawManager
+from Engine.InputManager import InputManager
+from Engine.UpdateManager import UpdateManager
+from Engine.Manager import Manager
+from Engine.Player import Player
 from Engine.config import Config
 
 
@@ -16,12 +17,13 @@ pygame.display.set_caption(Config.TITLE)
 running = True
 
 hand = Player.hand
-objects = [hand]
+DrawManager.screen = screen
+Manager.add_object(hand)
 
 while running:
-    running = input(objects)
+    running = InputManager.input()
 
-    draw(screen, objects)
+    DrawManager.draw()
 
     dt = clock.tick(Config.FPS_CAP) / 1000
-    update(objects, dt)
+    UpdateManager.update(dt)
