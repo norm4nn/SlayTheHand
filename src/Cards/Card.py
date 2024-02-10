@@ -1,5 +1,7 @@
 from Colors import colors
 from Engine.config import Config
+from Engine.DrawManager import DrawManager
+from Engine.UpdateManager import UpdateManager
 import pygame
 
 
@@ -24,6 +26,7 @@ class Card:
         self.destination_scale = None
         self.starting_scale = None
         self.scale_change_speed = 6
+        self.ms_without_observer = 0
 
     def use(self):
         pass
@@ -62,6 +65,11 @@ class Card:
         screen.blit(rotated_surface, rotated_rect.topleft)
 
     def update(self, dt):
+        if self.observer is None:
+            self.ms_without_observer += dt
+        if self.ms_without_observer > 2:
+            UpdateManager.remove_updateable_object(self)
+            DrawManager.remove_drawable_object(self)
         self.update_scale(dt)
         self.update_position(dt)
         self.update_rotation(dt)
@@ -153,4 +161,20 @@ class Card:
             self.observer.unhovered_card(self)
 
         if self.detected_hover() and self.is_hovered and pygame.mouse.get_pressed()[0]:
-            self.observer.discard(self)
+            self.discard()
+
+    def discard(self):
+        self.observer.discard(self)
+        UpdateManager.add_updateable_object(self)
+        DrawManager.add_drawable_object(self)
+        self.observer = None
+
+    @staticmethod
+    def generateCard():
+        rect = pygame.Rect(
+            100, 100, Config.DEFAULT_CARD_WIDTH, Config.DEFAULT_CARD_HEIGHT
+        )
+        name = "Example name"
+        desc = "Action"
+        image = None
+        return Card(rect, name, desc, image)

@@ -22,3 +22,7 @@ class InputManager:
     @staticmethod
     def add_object(object):
         InputManager.objects.append(object)
+
+    @staticmethod
+    def remove_object(object):
+        InputManager.objects.remove(object)

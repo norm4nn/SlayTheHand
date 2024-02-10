@@ -1,5 +1,5 @@
-from Cards.generateCard import generateCard
 from Cards.Hand import Hand
+from Cards.Card import Card
 
 
 class Player:
@@ -7,5 +7,5 @@ class Player:
 
     @staticmethod
     def add_card():
-        card = generateCard()
+        card = Card.generateCard()
         Player.hand.add(card)

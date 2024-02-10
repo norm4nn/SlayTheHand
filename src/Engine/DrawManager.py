@@ -23,3 +23,7 @@ class DrawManager:
     @staticmethod
     def add_drawable_object(drawable):
         DrawManager.drawables.append(drawable)
+
+    @staticmethod
+    def remove_drawable_object(drawable):
+        DrawManager.drawables.remove(drawable)

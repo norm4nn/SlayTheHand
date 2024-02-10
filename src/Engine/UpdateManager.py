@@ -9,3 +9,7 @@ class UpdateManager:
     @staticmethod
     def add_updateable_object(updateable):
         UpdateManager.updateables.append(updateable)
+
+    @staticmethod
+    def remove_updateable_object(updateable):
+        UpdateManager.updateables.remove(updateable)
