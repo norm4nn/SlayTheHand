@@ -168,6 +168,9 @@ class Card:
         UpdateManager.add_updateable_object(self)
         DrawManager.add_drawable_object(self)
         self.observer = None
+        self.set_destination_xy((1.2 * Config.WIDTH, self.xy[1]))
+        self.set_destination_rotation(720)
+        self.set_scale_destination(0.2)
 
     @staticmethod
     def generateCard():
